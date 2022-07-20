@@ -99,3 +99,8 @@ button {
     background-color: #800;
     color: #FFF;
 }
+
+#debug {
+    background-color: #EE7;
+    color: #333;
+}
