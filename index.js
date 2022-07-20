@@ -22,23 +22,33 @@ const isAlive = (x,y) => document.getElementById(`${x},${y}`)
       .classList.contains("alive");
 
 function countNeighbors(x,y) {
-  console.log(`counting neighbors of ${x},${y}`);
-  return DIRS.reduce((count, d) => count + (isAlive(x+d[0],y+d[1]) ? 1 : 0), 0);
+  return DIRS
+    .filter(([dx,dy]) =>
+      (x + dx >= 0 && x + dx < 16) && (y + dy >= 0 && y + dy < 12))
+    .reduce((count, [dx,dy]) => count + (isAlive(x+dx,y+dy) ? 1 : 0), 0);
 }
 
-function fnDebug() {
-  console.log(countNeighbors(8,6));
+function nextState() {
+  for (let y = 0; y < 12; y++) {
+    for (let x = 0; x < 16; x++) {
+      const current = document.getElementById(`${x},${y}`);
+      const neighbors = countNeighbors(x,y);
+      if (neighbors < 2) current.setAttribute("class", "dead");
+      else if (neighbors === 3) current.setAttribute("class", "alive");
+      else if (neighbors > 3) current.setAttribute("class", "dead");
+    }
+  }
 }
 
 function initButtons() {
   const start = document.getElementById("start");
   const clear = document.getElementById("clear");
-  const debug = document.getElementById("debug");
+  const next = document.getElementById("next");
   start.addEventListener("click", () => start.classList.contains("off")
 			 ? start.setAttribute("class", "on")
 			 : start.setAttribute("class", "off"));
   clear.addEventListener("click", () => clearGrid());
-  debug.addEventListener("click", () => fnDebug());
+  next.addEventListener("click", () => nextState());
 }
 
 function clearGrid() {
