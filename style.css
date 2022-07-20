@@ -3,7 +3,7 @@
 /* #00A blue */
 /* #08F light blue */
 /* #AFE cyan */
-/* #0C56 green */
+/* #0C5 green */
 /* #AF6 light green */
 /* #333 dark gray */
 /* #777 light grey */
@@ -26,13 +26,16 @@ html, body {
     width: 100%;
     font-family: 'VT323', monospace;
     font-size: 28px;
+    caret-color: transparent;
 }
 
 #container {
     display: flex;
+    flex-direction: column;
     height: 100%;
     justify-content: center;
     align-items: center;
+    padding: 0;
 }
 
 #app {
@@ -49,9 +52,50 @@ html, body {
     grid-gap: 0px;
 }
 
-.cell {
-    background-color: red;
+.dead {
+    background-color: #00A;
     border: 1px solid #FFF;
     width: 38px;
     height: 38px;
+}
+
+.alive {
+    background-color: #FFF;
+    grid-gap: 2px;
+    width: 36px;
+    height: 36px;
+}
+
+h1 {
+    color: #FFF;
+    -webkit-text-stroke: 2px #00A;
+}
+
+.toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+button {
+    border: 1px solid #FFF;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    width: 100%;
+    height: 100%;
+}
+
+.off {
+    background-color: #0C5;
+    color: #333;
+}
+
+.on {
+    background-color: #777;
+    color: #FFF;
+}
+
+#clear {
+    background-color: #800;
+    color: #FFF;
 }
