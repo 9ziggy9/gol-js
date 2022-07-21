@@ -1,5 +1,6 @@
-const ROWS = 12;
-const COLS = 16;
+const ROWS = 24;
+const COLS = 32;
+const TIME_STEP = 75;
 const DIRS = [
   [1,0], // right
   [-1,0], // left
@@ -10,6 +11,7 @@ const DIRS = [
   [-1,1], // bottom left
   [1,1], // bottom right
 ];
+let INTERVAL_POINTER = null;
   
 function initialize() {
   buildGrid();
@@ -25,8 +27,8 @@ const isAlive = (x,y) => document.getElementById(`${x},${y}`)
 
 function countNeighbors(x,y) {
   return DIRS
-    .filter(([dx,dy]) => (x + dx >= 0 && x + dx < 16) &&
-	                 (y + dy >= 0 && y + dy < 12))
+    .filter(([dx,dy]) => (x + dx >= 0 && x + dx < COLS) &&
+	                 (y + dy >= 0 && y + dy < ROWS))
     .reduce((count, [dx,dy]) => count + (isAlive(x+dx,y+dy) ? 1 : 0), 0);
 }
 
@@ -49,7 +51,6 @@ function nextState() {
     for (let x = 0; x < COLS; x++) {
       let current = document.getElementById(`${x},${y}`);
       if (neighbors[`${x},${y}`] < 2) {
-	console.log(neighbors);
 	current.setAttribute("class", "dead");
       }
       else if (neighbors[`${x},${y}`] === 3) {
@@ -62,13 +63,25 @@ function nextState() {
   }
 }
 
+function fnStart() {
+  const start = document.getElementById("start");
+  start.setAttribute("class", "on");
+  INTERVAL_POINTER = setInterval(() => nextState(), TIME_STEP);
+}
+
+function fnStop() {
+  const start = document.getElementById("start");
+  start.setAttribute("class", "off");
+  clearInterval(INTERVAL_POINTER);
+}
+
 function initButtons() {
   const start = document.getElementById("start");
   const clear = document.getElementById("clear");
   const next = document.getElementById("next");
   start.addEventListener("click", () => start.classList.contains("off")
-			 ? start.setAttribute("class", "on")
-			 : start.setAttribute("class", "off"));
+			 ? fnStart()
+			 : fnStop());
   clear.addEventListener("click", () => clearGrid());
   next.addEventListener("click", () => nextState());
 }
