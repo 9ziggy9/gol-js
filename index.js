@@ -1,3 +1,5 @@
+const ROWS = 12;
+const COLS = 16;
 const DIRS = [
   [1,0], // right
   [-1,0], // left
@@ -23,19 +25,38 @@ const isAlive = (x,y) => document.getElementById(`${x},${y}`)
 
 function countNeighbors(x,y) {
   return DIRS
-    .filter(([dx,dy]) =>
-      (x + dx >= 0 && x + dx < 16) && (y + dy >= 0 && y + dy < 12))
+    .filter(([dx,dy]) => (x + dx >= 0 && x + dx < 16) &&
+	                 (y + dy >= 0 && y + dy < 12))
     .reduce((count, [dx,dy]) => count + (isAlive(x+dx,y+dy) ? 1 : 0), 0);
 }
 
+function saveState() {
+  const snapshot = {};
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      snapshot[`${x},${y}`] = countNeighbors(x,y);
+    }
+  }
+  return snapshot;
+}
+
 function nextState() {
-  for (let y = 0; y < 12; y++) {
-    for (let x = 0; x < 16; x++) {
-      const current = document.getElementById(`${x},${y}`);
-      const neighbors = countNeighbors(x,y);
-      if (neighbors < 2) current.setAttribute("class", "dead");
-      else if (neighbors === 3) current.setAttribute("class", "alive");
-      else if (neighbors > 3) current.setAttribute("class", "dead");
+  // PROBLEM; neighbors are being mutated in real time, need snapshot
+  // of state before doing stuff
+  const neighbors = saveState();
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      let current = document.getElementById(`${x},${y}`);
+      if (neighbors[`${x},${y}`] < 2) {
+	console.log(neighbors);
+	current.setAttribute("class", "dead");
+      }
+      else if (neighbors[`${x},${y}`] === 3) {
+	current.setAttribute("class", "alive");
+      }
+      else if (neighbors[`${x},${y}`] > 3) {
+	current.setAttribute("class", "dead");
+      }
     }
   }
 }
@@ -52,8 +73,8 @@ function initButtons() {
 }
 
 function clearGrid() {
-  for (let y = 0; y < 12; y++) {
-    for (let x = 0; x < 16; x++) {
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
       const current = document.getElementById(`${x},${y}`);
       current.setAttribute("class", "dead");
     }
@@ -62,11 +83,9 @@ function clearGrid() {
 
 function buildGrid() {
   const grid = document.getElementById("game");
-  for (let y = 0; y < 12; y++) {
-    for (let x = 0; x < 16; x++) {
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
       const cell = document.createElement("div");
-      // cell.setAttribute("class", "cell");
-      // cell.setAttribute("style", `background-color: ${randColor()}`);
       cell.setAttribute("class", "dead");
       cell.setAttribute("id", `${x},${y}`);
       cell.addEventListener("click",
