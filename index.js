@@ -50,6 +50,10 @@ function nextState() {
   for (let y = 0; y < ROWS; y++) {
     for (let x = 0; x < COLS; x++) {
       let current = document.getElementById(`${x},${y}`);
+      if (x === 0 || y === 0 ||
+	  x === COLS - 1 || y === ROWS - 1 ) {
+	current.setAttribute("class", "dead");
+      }
       if (neighbors[`${x},${y}`] < 2) {
 	current.setAttribute("class", "dead");
       }
