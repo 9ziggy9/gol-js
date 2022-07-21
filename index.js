@@ -66,12 +66,14 @@ function nextState() {
 function fnStart() {
   const start = document.getElementById("start");
   start.setAttribute("class", "on");
+  start.innerHTML = "STOP";
   INTERVAL_POINTER = setInterval(() => nextState(), TIME_STEP);
 }
 
 function fnStop() {
   const start = document.getElementById("start");
   start.setAttribute("class", "off");
+  start.innerHTML = "START";
   clearInterval(INTERVAL_POINTER);
 }
 
