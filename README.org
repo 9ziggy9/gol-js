@@ -1,0 +1,3 @@
+* John Conway's Game of Life
+Simple vanilla JS implementation with HTML/CSS for grid.
+https://peppy-kitsune-8e5917.netlify.app/
