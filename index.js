@@ -40,6 +40,7 @@ function saveState() {
   return snapshot;
 }
 
+// TODO: Boundary conditions -- talk about toruses?
 function nextState() {
   // PROBLEM; neighbors are being mutated in real time, need snapshot
   // of state before doing stuff
